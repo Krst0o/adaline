@@ -1,4 +1,4 @@
-#!/home/krsto/Dokumenty/STUDIA/WdSN/Zadanie_2/venv/bin/python
+#!/home/czarnecki/Dokumenty/WdSN/Zadanie_2_Adaline/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
