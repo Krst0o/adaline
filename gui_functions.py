@@ -1,15 +1,16 @@
 from variables import *
-
+from training_data import *
 
 # Draw grid
 def draw_grid(received_grid):
     font = pygame.font.SysFont('Arial', 16)
     label_font = pygame.font.SysFont('Arial', 20)
-    for i in range(49):
-        color = white
-        if received_grid[i] == 1:
-            color = darkgray
-        pygame.draw.rect(screen, color, [(block_width + 1) * int(i % 7)+10, (block_height + 1) * int(i / 7) + 10,
+    for row in range(7):
+        for col in range(7):
+            color = white
+            if received_grid[row][col] == 1:
+                color = darkgray
+            pygame.draw.rect(screen, color, [(block_width + 1) * col+10, (block_height + 1) * row + 10,
                                          block_width, block_height])
 
     ### FIRST ROW
@@ -60,38 +61,40 @@ def draw_grid(received_grid):
 
     # FOURTH ROW
     # Create label
-    label = label_font.render("which_perceptron", False, (255, 255, 255))
+    label = label_font.render(which_perceptron, False, (255, 255, 255))
     screen.blit(label, (0, 375))
 
 
 # Change button color and gird value after click on proper button
 def change_clicked_button(received_grid, clicked_x, clicked_y):
     # Get row and column
-    row = int((clicked_y-10) / 35)
-    col = int((clicked_x-10) / 35)
-    i = 7 * row + col
+    row = int((clicked_x-10) / 35)
+    col = int((clicked_y-10) / 35)
+    #i = 7 * row + col
     # Change color and value
-    if received_grid[i] == 0:
-        received_grid[i] = 1
+    if received_grid[row][col] == 0:
+        received_grid[row][col] = 1
     else:
-        received_grid[i] = 0
+        received_grid[row][col] = 0
     return received_grid
 
 
 # Set grid values to 0
 def clear_grid_button(received_grid):
-    for i in range(49):
-        received_grid[i] = 0
+    for row in range(7):
+        for col in range(7):
+            received_grid[row][col] = 0
     return received_grid
 
 
 # Turn over grid values
 def inverse_grid_button(received_grid):
-    for i in range(49):
-        if received_grid[i] == 0:
-            received_grid[i] = 1
-        else:
-            received_grid[i] = 0
+    for row in range(7):
+        for col in range(7):
+            if received_grid[row][col] == 0:
+                received_grid[row][col] = 1
+            else:
+                received_grid[row][col] = 0
     return received_grid
 
 
@@ -105,41 +108,46 @@ def blur_grid_button(received_grid):
 
 # Shift array
 def up_grid_button(received_grid):
-    received_grid = received_grid.reshape((7, 7))
     received_grid = np.roll(received_grid, -1, axis=0)
-    received_grid = received_grid.reshape((-1))
     return received_grid
 
 
 # Shift array
 def down_grid_button(received_grid):
-    received_grid = received_grid.reshape((7, 7))
     received_grid = np.roll(received_grid, 1, axis=0)
-    received_grid = received_grid.reshape((-1))
     return received_grid
 
 
 # Shift array
 def left_grid_button(received_grid):
-    received_grid = received_grid.reshape((7, 7))
     received_grid = np.roll(received_grid, -1, axis=1)
-    received_grid = received_grid.reshape((-1))
     return received_grid
 
 
 # Shift array
 def right_grid_button(received_grid):
-    received_grid = received_grid.reshape((7, 7))
     received_grid = np.roll(received_grid, 1, axis=1)
-    received_grid = received_grid.reshape((-1))
     return received_grid
 
 
 # Check number classification for selected values in grid
-def check_grid_button():
-    print("Check")
+def check_grid_button(received_grid):
+    global which_perceptron
+    screen.fill((0, 0, 0))
+    results = []
+
+    grid_to_check = np.copy(received_grid)
+    grid_to_check = np.ravel(grid_to_check)
+    for i in range(10):
+        print("Number {}: {}".format(i, adaline[i].predict(grid_to_check)))
+        results.append(adaline[i].predict(grid_to_check))
+    which_perceptron = "Perceptron: " + str(np.argmax(results))
 
 
-# Read data from file and train perceptrons
+# Read data from file and train adaline
 def learn_grid_button():
-    print("Learn")
+    for i in range(10):
+        labels = np.zeros(10)
+        labels[i] = 1
+        adaline[i].train(training_inputs, labels)
+    print("Learned")

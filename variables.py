@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import numpy as np
 # GUI VARIABLES
 # Colors
@@ -18,4 +18,6 @@ screen = pygame.display.set_mode(window_size)
 pygame.display.set_caption("Numbers - neural network")
 
 # MAIN VARIABLES
-grid = np.array(49 * [0])
+grid = [[0 for x in range(7)] for y in range(7)]
+adaline = []
+which_perceptron = ""

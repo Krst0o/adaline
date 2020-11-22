@@ -1,5 +1,6 @@
 from variables import *
 from training_data import *
+from Adaline import *
 # GUI INIT
 pygame.init()
 from gui_functions import *
@@ -11,30 +12,32 @@ def main():
     while True:
         # gui_function function
         draw_grid(grid)
+        for i in range(10):
+            adaline.append(Adaline(7*7))
         # Listen for events
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_0:
-                    grid = np.copy(number[0][1])
+                    grid = np.copy(number[0])
                 if event.key == pygame.K_1:
-                    grid = np.copy(number[1][1])
+                    grid = np.copy(number[1])
                 if event.key == pygame.K_2:
-                    grid = np.copy(number[2][1])
+                    grid = np.copy(number[2])
                 if event.key == pygame.K_3:
-                    grid = np.copy(number[3][1])
+                    grid = np.copy(number[3])
                 if event.key == pygame.K_4:
-                    grid = np.copy(number[4][1])
+                    grid = np.copy(number[4])
                 if event.key == pygame.K_5:
-                    grid = np.copy(number[5][1])
+                    grid = np.copy(number[5])
                 if event.key == pygame.K_6:
-                    grid = np.copy(number[6][1])
+                    grid = np.copy(number[6])
                 if event.key == pygame.K_7:
-                    grid = np.copy(number[7][1])
+                    grid = np.copy(number[7])
                 if event.key == pygame.K_8:
-                    grid = np.copy(number[8][1])
+                    grid = np.copy(number[8])
                 if event.key == pygame.K_9:
-                    grid = np.copy(number[9][1])
+                    grid = np.copy(number[9])
                 if event.key == pygame.K_UP:
                     grid = up_grid_button(grid)
                 if event.key == pygame.K_DOWN:
@@ -43,14 +46,17 @@ def main():
                     grid = left_grid_button(grid)
                 if event.key == pygame.K_RIGHT:
                     grid = right_grid_button(grid)
+                if event.key == pygame.K_SPACE:
+                    check_grid_button(grid)
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     clicked_x = pygame.mouse.get_pos()[0]
                     clicked_y = pygame.mouse.get_pos()[1]
                     # gui_function function
-                    if (0 < clicked_x < 256) and (0 < clicked_y <= 264):
+                    if (0 < clicked_x <= 256) and (0 < clicked_y <= 264):
                         grid = change_clicked_button(grid, clicked_x, clicked_y)
                     # gui_function function
                     if (0 <= clicked_x <= 64) and (270 <= clicked_y <= 302):
@@ -81,7 +87,7 @@ def main():
                         learn_grid_button()
                     # gui_function function
                     if (65 <= clicked_x <= 129) and (336 <= clicked_y <= 368):
-                        check_grid_button()
+                        check_grid_button(grid)
             else:
                 continue
         pygame.display.update()
