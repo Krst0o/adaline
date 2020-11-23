@@ -10,7 +10,7 @@ def fourier_transform(x):
 
 
 class Adaline(object):
-    def __init__(self, no_of_input, learning_rate=0.01, iterations=100000):
+    def __init__(self, no_of_input, learning_rate=0.01, iterations=10000):
         self.no_of_input = no_of_input
         self.learning_rate = learning_rate
         self.iterations = iterations
@@ -34,9 +34,8 @@ class Adaline(object):
             random_training_data = random_training_data * 0.8 + 0.1
             random_training_label = random_training_label * 0.8 + 0.1
 
-            random_training_data = self._standarize(random_training_data)
-
             extended_training_data = np.concatenate([random_training_data, fourier_transform(random_training_data)])
+            extended_training_data = self._normalize(extended_training_data)
             out = self.output(extended_training_data)
 
             self.weights[1:] += self.learning_rate * (random_training_label - out) * self._activation_derivative(out) * extended_training_data
@@ -61,8 +60,8 @@ class Adaline(object):
         return summation
 
     def predict(self, input):
-        input = self._standarize(input)
-        input *= 0.8 + 0.1
+        input = input * 0.8 + 0.1
         extended_input = np.concatenate([input, fourier_transform(input)])
+        extended_input = self._standarize(extended_input)
         summation = self._activation(np.dot(self.weights[1:], extended_input) + self.weights[0])
         return summation

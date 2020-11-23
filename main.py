@@ -56,7 +56,7 @@ def main():
                     clicked_x = pygame.mouse.get_pos()[0]
                     clicked_y = pygame.mouse.get_pos()[1]
                     # gui_function function
-                    if (0 < clicked_x <= 256) and (0 < clicked_y <= 264):
+                    if (0 < clicked_x <= 256) and (0 < clicked_y <= 274):
                         grid = change_clicked_button(grid, clicked_x, clicked_y)
                     # gui_function function
                     if (0 <= clicked_x <= 64) and (270 <= clicked_y <= 302):
@@ -83,11 +83,17 @@ def main():
                     if (195 <= clicked_x <= 259) and (303 <= clicked_y <= 335):
                         pygame.quit()
                     # gui_function function
-                    if (0 <= clicked_x <= 64) and (336 <= clicked_y <= 368):
+                    if (0 <= clicked_x <= 64) and (336 <= clicked_y <= 378):
                         learn_grid_button()
                     # gui_function function
-                    if (65 <= clicked_x <= 129) and (336 <= clicked_y <= 368):
+                    if (65 <= clicked_x <= 129) and (336 <= clicked_y <= 378):
                         check_grid_button(grid)
+                    # gui_function function
+                    if (130 <= clicked_x <= 194) and (336 <= clicked_y <= 378):
+                        grid = vertical_grid_button(grid)
+                    # gui_function function
+                    if (195 <= clicked_x <= 259) and (336 <= clicked_y <= 378):
+                        grid = horizontal_grid_button(grid)
             else:
                 continue
         pygame.display.update()

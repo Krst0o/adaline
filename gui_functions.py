@@ -1,16 +1,18 @@
+import matplotlib.pyplot as plt
 from variables import *
 from training_data import *
 
 # Draw grid
 def draw_grid(received_grid):
+    screen.fill((0, 0, 0))
     font = pygame.font.SysFont('Arial', 16)
-    label_font = pygame.font.SysFont('Arial', 20)
+    label_font = pygame.font.SysFont('Arial', 18)
     for row in range(7):
         for col in range(7):
             color = white
             if received_grid[row][col] == 1:
                 color = darkgray
-            pygame.draw.rect(screen, color, [(block_width + 1) * col+10, (block_height + 1) * row + 10,
+            pygame.draw.rect(screen, color, [(block_width + 1) * col + 10, (block_height + 1) * row + 10,
                                          block_width, block_height])
 
     ### FIRST ROW
@@ -58,19 +60,63 @@ def draw_grid(received_grid):
     learn_button_text = font.render("CHECK", False, (0, 0, 0))
     learn_button = pygame.draw.rect(screen, lightgray, (65, 336, 64, 32))
     screen.blit(learn_button_text, learn_button)
+    # Create vertical reflection button
+    learn_button_text = font.render("VERTICAL", False, (0, 0, 0))
+    learn_button = pygame.draw.rect(screen, lightgray, (130, 336, 64, 32))
+    screen.blit(learn_button_text, learn_button)
+    # Create horizontal reflection button
+    learn_button_text = font.render("HORIZONTAL", False, (0, 0, 0))
+    learn_button = pygame.draw.rect(screen, lightgray, (195, 336, 64, 32))
+    screen.blit(learn_button_text, learn_button)
 
     # FOURTH ROW
     # Create label
-    label = label_font.render(which_perceptron, False, (255, 255, 255))
-    screen.blit(label, (0, 375))
+    label0 = label_font.render("0: ", False, white)
+    screen.blit(label0, (0, 375))
+    pygame.draw.rect(screen, white, [20, 375, confidence[0] * 200, 20])
+
+    label1 = label_font.render("1: ", False, white)
+    screen.blit(label1, (0, 395))
+    pygame.draw.rect(screen, white, [20, 395, confidence[1] * 200, 20])
+
+    label2 = label_font.render("2: ", False, white)
+    screen.blit(label2, (0, 415))
+    pygame.draw.rect(screen, white, [20, 415, confidence[2] * 200, 20])
+
+    label3 = label_font.render("3: ", False, white)
+    screen.blit(label3, (0, 435))
+    pygame.draw.rect(screen, white, [20, 435, confidence[3] * 200, 20])
+
+    label4 = label_font.render("4: ", False, white)
+    screen.blit(label4, (0, 455))
+    pygame.draw.rect(screen, white, [20, 455, confidence[4] * 200, 20])
+
+    label5 = label_font.render("5: ", False, white)
+    screen.blit(label5, (0, 475))
+    pygame.draw.rect(screen, white, [20, 475, confidence[5] * 200, 20])
+
+    label6 = label_font.render("6: ", False, white)
+    screen.blit(label6, (0, 495))
+    pygame.draw.rect(screen, white, [20, 495, confidence[6] * 200, 20])
+
+    label7 = label_font.render("7: ", False, white)
+    screen.blit(label7, (0, 515))
+    pygame.draw.rect(screen, white, [20, 515, confidence[7] * 200, 20])
+
+    label8 = label_font.render("8: ", False, white)
+    screen.blit(label8, (0, 535))
+    pygame.draw.rect(screen, white, [20, 535, confidence[8] * 200, 20])
+
+    label9 = label_font.render("9: ", False, white)
+    screen.blit(label9, (0, 555))
+    pygame.draw.rect(screen, white, [20, 555, confidence[9] * 200, 20])
 
 
 # Change button color and gird value after click on proper button
 def change_clicked_button(received_grid, clicked_x, clicked_y):
     # Get row and column
-    row = int((clicked_x-10) / 35)
-    col = int((clicked_y-10) / 35)
-    #i = 7 * row + col
+    row = int((clicked_y-10) / 35)
+    col = int((clicked_x-10) / 35)
     # Change color and value
     if received_grid[row][col] == 0:
         received_grid[row][col] = 1
@@ -132,22 +178,24 @@ def right_grid_button(received_grid):
 
 # Check number classification for selected values in grid
 def check_grid_button(received_grid):
-    global which_perceptron
-    screen.fill((0, 0, 0))
-    results = []
-
-    grid_to_check = np.copy(received_grid)
-    grid_to_check = np.ravel(grid_to_check)
     for i in range(10):
-        print("Number {}: {}".format(i, adaline[i].predict(grid_to_check)))
-        results.append(adaline[i].predict(grid_to_check))
-    which_perceptron = "Perceptron: " + str(np.argmax(results))
+        confidence[i] = adaline[i].predict(np.ravel(received_grid))
+
 
 
 # Read data from file and train adaline
 def learn_grid_button():
+    print("Learn")
     for i in range(10):
         labels = np.zeros(10)
         labels[i] = 1
         adaline[i].train(training_inputs, labels)
-    print("Learned")
+        print("Learned {}".format(i))
+
+
+def vertical_grid_button(received_grid):
+    return received_grid[:, ::-1]
+
+
+def horizontal_grid_button(received_grid):
+    return received_grid[::-1]

@@ -2,7 +2,7 @@ import pygame, sys
 import numpy as np
 # GUI VARIABLES
 # Colors
-window_size = (264, 400)
+window_size = (264, 575)
 black = (0, 0, 0)
 darkgray = (50, 50, 50)
 gray = (140, 140, 140)
@@ -20,4 +20,4 @@ pygame.display.set_caption("Numbers - neural network")
 # MAIN VARIABLES
 grid = [[0 for x in range(7)] for y in range(7)]
 adaline = []
-which_perceptron = ""
+confidence = np.array(10 * [0.])
